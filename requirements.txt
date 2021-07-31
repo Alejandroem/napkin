@@ -1,0 +1,6 @@
+djangorestframework
+djangorestframework_jwt
+oauth2client
+gspread
+markdown
+django-filter

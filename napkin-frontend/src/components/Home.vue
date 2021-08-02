@@ -121,7 +121,7 @@
             <template v-if="allInputs">
               <v-divider class="ma-4"></v-divider>
               <v-form
-                ref="formAll"
+                ref="more"
                 v-model="validAll"
                 lazy-validation
                 align="center"
@@ -401,6 +401,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data: () => ({
     allInputs: false,
@@ -418,9 +420,28 @@ export default {
 
   methods: {
     calculate() {
-      this.$refs.form.validate();
-      this.$refs.formAll.validate();
       console.log("Call G Sheets Endpoint");
+      this.$refs.form.validate();
+      console.log("First form valid");
+      if (this.$data.allInputs) {
+        this.$refs.more.validate();
+        console.log("Second form valid");
+      }
+      const payload = {
+        data: "test",
+      };
+      axios({
+        method: "post",
+        url: "http://localhost:8000/calculator/api/calculator",
+        params: payload,
+        headers: { Authorization: "jwt " + this.$store.state.jwt },
+      })
+        .then((response) => {
+          console.log("Response ", response);
+        })
+        .catch((error) => {
+          console.log("Error ", error);
+        });
     },
     canSubmit() {
       if (this.$data.allInputs) {

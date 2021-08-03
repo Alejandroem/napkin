@@ -19,7 +19,7 @@ Vue.use(Vuetify);
 
 const store = new Vuex.Store({
   state: {
-    currentUser: '',
+    currentUser: localStorage.getItem('u'),
     isAuth: false,
     jwt: localStorage.getItem('t'),
     endpoints: {
@@ -30,6 +30,7 @@ const store = new Vuex.Store({
   mutations: {
     updateUsername(state, username) {
       state.currentUser = username;
+      localStorage.setItem('u', username);
     },
     updateIsAuth(state, isAuth) {
       state.isAuth = isAuth;

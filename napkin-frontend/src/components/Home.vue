@@ -403,6 +403,11 @@
                 <v-icon dark v-if="allInputs"> mdi-minus </v-icon>
               </v-btn>
             </v-row>
+            <v-row align="center" justify="center" v-if="hasError">
+              <v-alert color="red" type="error">
+                There was an error with your request, refresh and try again
+              </v-alert>
+            </v-row>
             <v-row align="center" justify="center">
               <v-btn
                 class="ma-2"
@@ -529,7 +534,7 @@ import axios from "axios";
 export default {
   data: (vm) => ({
     loading: false,
-
+    hasError: false,
     //FIRST FORM
     totalSF: 1,
     holdPeriod: 1,
@@ -637,6 +642,7 @@ export default {
       }
 
       this.$data.loading = true;
+      this.$data.hasError = false;
       const payload = {
         totalSF: this.$data.totalSF,
         holdPeriod: this.$data.holdPeriod,
@@ -687,9 +693,8 @@ export default {
         })
         .catch((error) => {
           console.log("Error ", error);
-
-          const l = this.loader;
-          this[l] = false;
+          this.$data.loading = false;
+          this.$data.hasError = true;
         });
     },
     canSubmit() {

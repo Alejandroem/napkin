@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <div v-if="isAuth">Hello {{ userName }}!</div>
+      <div v-if="isAuth">Welcome back {{ userName }}!</div>
     </v-app-bar>
     <v-main>
       <div v-if="!isAuth">

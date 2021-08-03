@@ -19,7 +19,10 @@
                       <v-subheader>Total SF</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="totalSF"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -28,7 +31,10 @@
                       <v-subheader>Hold period</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="holdPeriod"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -37,7 +43,10 @@
                       <v-subheader>Purchase Price</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="purchasePrice"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -46,7 +55,10 @@
                       <v-subheader>Exit cap rate</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="exitCapRate"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -57,7 +69,10 @@
                       <v-subheader>In Place Rent PSF</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="inPlaceRentPSF"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -69,19 +84,19 @@
                       <v-dialog
                         ref="dialog"
                         v-model="modal"
-                        :return-value.sync="date"
+                        :return-value.sync="inPlaceExpiration"
                         persistent
                         width="290px"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="date"
+                            v-model="computedInPlaceExpirationFormated"
                             readonly
                             v-bind="attrs"
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="date" scrollable>
+                        <v-date-picker v-model="inPlaceExpiration" scrollable>
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="modal = false">
                             Cancel
@@ -89,7 +104,7 @@
                           <v-btn
                             text
                             color="primary"
-                            @click="$refs.dialog.save(date)"
+                            @click="$refs.dialog.save(inPlaceExpiration)"
                           >
                             OK
                           </v-btn>
@@ -103,7 +118,10 @@
                       <v-subheader>New Tenant Rent PSF</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="newTenantRentPSF"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -112,7 +130,10 @@
                       <v-subheader>New Tenant TI/SF</v-subheader>
                     </v-col>
                     <v-col cols="8">
-                      <v-text-field type="number" value="10.00"></v-text-field>
+                      <v-text-field
+                        type="number"
+                        v-model="newTenantTISF"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -404,7 +425,25 @@
 import axios from "axios";
 
 export default {
-  data: () => ({
+  data: (vm) => ({
+    totalSF: 0,
+    holdPeriod: 0,
+    purchasePrice: 0,
+    exitCapRate: 0,
+    inPlaceRentPSF: 0,
+    inPlaceExpiration: new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .substr(0, 10),
+    inPlaceExpirationFormated: vm.formatDate(
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10)
+    ),
+    newTenantRentPSF: 0,
+    newTenantTISF: 0,
+
     allInputs: false,
     valid: true,
     validAll: true,
@@ -412,13 +451,34 @@ export default {
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
-    usernameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+    numberRules: [
+      (v) => !!v || "The field is required",
+      (v) => (v && v <= -1) || "Value should be more than 0",
     ],
   }),
-
+  computed: {
+    computedInPlaceExpirationFormated() {
+      return this.formatDate(this.inPlaceExpiration);
+    },
+  },
+  watch: {
+    date() {
+      this.inPlaceExpirationFormated = this.formatDate(this.date);
+    },
+  },
   methods: {
+    formatDate(date) {
+      if (!date) return null;
+
+      const [year, month, day] = date.split("-");
+      return `${month}/${day}/${year}`;
+    },
+    parseDate(date) {
+      if (!date) return null;
+
+      const [month, day, year] = date.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    },
     calculate() {
       console.log("Call G Sheets Endpoint");
       this.$refs.form.validate();
@@ -428,12 +488,19 @@ export default {
         console.log("Second form valid");
       }
       const payload = {
-        data: "test",
+        totalSF: this.$data.totalSF,
+        holdPeriod: this.$data.holdPeriod,
+        purchasePrice: this.$data.purchasePrice,
+        exitCapRate: this.$data.exitCapRate,
+        inPlaceRentPSF: this.$data.inPlaceRentPSF,
+        inPlaceExpiration: this.$data.inPlaceExpirationFormated,
+        newTenantRentPSF: this.$data.newTenantRentPSF,
+        newTenantTISF: this.$data.newTenantTISF,
       };
       axios({
         method: "post",
         url: "http://localhost:8000/calculator/api/calculator",
-        params: payload,
+        data: payload,
         headers: { Authorization: "jwt " + this.$store.state.jwt },
       })
         .then((response) => {

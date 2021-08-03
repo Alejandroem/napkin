@@ -13,4 +13,4 @@ def index(request):
 
 class CalculatorAPI(APIView): 
     def post(self, request):
-        return JsonResponse(calculate_from_gsheets(), safe=False)
+        return JsonResponse(calculate_from_gsheets(request.data), safe=False)

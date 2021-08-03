@@ -1,14 +1,45 @@
+from datetime import datetime
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+from googleapiclient.discovery import build
+
+from apiclient import errors
 
 def calculate_from_gsheets(values):    
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+            'pythonsheets-321421-8d7f4d692a90.json')
+    service = build('drive', 'v3', credentials=credentials)
+    
+
+
+    #File id
+    source_file_id = '1rEGCfoMPKEfrXVaIBiLU-T2B6oKYkQzlw4AsF0d_7Zw'
+
+    #Folder id
+    folders_id = ['1FSZ5_Ckdn7-GZykLtIHvltMvK9aQ8-K6']
+
+    file_metadata = {
+        'name' : datetime.now().isoformat(),
+        'parents' : folders_id,
+        'starred' : True,
+    }
+    
+    try:
+        created_file = service.files().copy(
+            fileId=source_file_id, body=file_metadata).execute()
+        print(created_file)
+    except errors.HttpError as error:
+        print(error)
+        raise ValueError('An error occured while creating the file' + error.error_details)
+
+
     gc = gspread.service_account(filename='pythonsheets-321421-8d7f4d692a90.json')
-    gdoc = gc.open_by_url("https://docs.google.com/spreadsheets/d/1rEGCfoMPKEfrXVaIBiLU-T2B6oKYkQzlw4AsF0d_7Zw")
+    gdoc = gc.open_by_url("https://docs.google.com/spreadsheets/d/"+created_file['id'])
 
     mydata = gdoc.sheet1.get_all_records()
-    print(values['totalSF'])
     inputsSheet = gdoc.worksheet("Inputs")
     inputsSheet.update('B2', float(values['totalSF']), value_input_option='USER_ENTERED')
     inputsSheet.update('B3', float(values['holdPeriod']), value_input_option='USER_ENTERED')
@@ -38,10 +69,17 @@ def calculate_from_gsheets(values):
         inputsSheet.update('B30', str(values['acquisitionFees']).strip()+"%",value_input_option='USER_ENTERED')
 
     resultsSheet = gdoc.worksheet("Results")
-    return {
+    response = {
         'unleveredIRR': resultsSheet.acell('B1').value,
         'unleveredMOC': resultsSheet.acell('B2').value,
         'grossLeveredIRR': resultsSheet.acell('B3').value,
         'grossLeveredMOC': resultsSheet.acell('B4').value,
         'yieldOnCost': resultsSheet.acell('B5').value,
     }
+
+    try:
+        created_file = service.files().delete(fileId=created_file['id']).execute()
+    except errors.HttpError as error:
+        print(error)
+        raise ValueError('An error occured while deleting the file' + error.error_details)
+    return response

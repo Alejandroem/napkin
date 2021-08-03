@@ -432,7 +432,7 @@
         <v-col cols="8">
           <v-card class="pa-6">
             <h3>Results</h3>
-            <v-row>
+            <v-row v-if="!hasError">
               <v-col cols="6">
                 <v-row>
                   <v-col cols="4">

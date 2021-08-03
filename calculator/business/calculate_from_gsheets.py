@@ -13,7 +13,7 @@ def calculate_from_gsheets(values):
     inputsSheet.update('B2', float(values['totalSF']))
     inputsSheet.update('B3', float(values['holdPeriod']))
     inputsSheet.update('B4', float(values['purchasePrice']))
-    inputsSheet.update('B5', values['exitCapRate'].strip()+"%")
+    inputsSheet.update('B5', str(values['exitCapRate']).strip()+"%")
     inputsSheet.update('B6', float(values['inPlaceRentPSF']))
     inputsSheet.update('B7', values['inPlaceExpiration'])
     inputsSheet.update('B8', float(values['newTenantRentPSF']))
@@ -24,6 +24,6 @@ def calculate_from_gsheets(values):
         'unleveredIRR': resultsSheet.acell('B1').value,
         'unleveredMOC': resultsSheet.acell('B2').value,
         'grossLeveredIRR': resultsSheet.acell('B3').value,
-        'grossLeveredMoc': resultsSheet.acell('B4').value,
+        'grossLeveredMOC': resultsSheet.acell('B4').value,
         'yieldOnCost': resultsSheet.acell('B5').value,
     }

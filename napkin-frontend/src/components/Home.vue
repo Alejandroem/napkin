@@ -22,6 +22,7 @@
                       <v-text-field
                         type="number"
                         v-model="totalSF"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -34,6 +35,7 @@
                       <v-text-field
                         type="number"
                         v-model="holdPeriod"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -46,6 +48,7 @@
                       <v-text-field
                         type="number"
                         v-model="purchasePrice"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -58,6 +61,7 @@
                       <v-text-field
                         type="number"
                         v-model="exitCapRate"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -72,6 +76,7 @@
                       <v-text-field
                         type="number"
                         v-model="inPlaceRentPSF"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -121,6 +126,7 @@
                       <v-text-field
                         type="number"
                         v-model="newTenantRentPSF"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -133,6 +139,7 @@
                       <v-text-field
                         type="number"
                         v-model="newTenantTISF"
+                        :rules="numberRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -398,12 +405,18 @@
             </v-row>
             <v-row align="center" justify="center">
               <v-btn
-                :disabled="!canSubmit()"
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading || !canSubmit()"
                 color="success"
-                class="mr-4"
                 @click="calculate"
               >
                 Save & Run
+                <template v-if="loading">
+                  <span class="custom-loader">
+                    <v-icon light>mdi-cached</v-icon>
+                  </span>
+                </template>
               </v-btn>
             </v-row>
           </v-card>
@@ -414,6 +427,95 @@
         <v-col cols="8">
           <v-card class="pa-6">
             <h3>Results</h3>
+            <v-row>
+              <v-col cols="6">
+                <v-row>
+                  <v-col cols="4">
+                    <v-subheader>Unlevered IRR</v-subheader>
+                  </v-col>
+                  <v-col cols="8">
+                    <label v-if="!loading">{{ unleveredIRR }}</label>
+
+                    <v-progress-linear
+                      v-if="loading"
+                      color="deep-purple accent-4"
+                      indeterminate
+                      rounded
+                      height="6"
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="4">
+                    <v-subheader>Unlevered MoC</v-subheader>
+                  </v-col>
+                  <v-col cols="8">
+                    <label v-if="!loading">{{ unleveredMOC }}</label>
+
+                    <v-progress-linear
+                      v-if="loading"
+                      color="deep-purple accent-4"
+                      indeterminate
+                      rounded
+                      height="6"
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="4">
+                    <v-subheader>Gross Levered IRR</v-subheader>
+                  </v-col>
+                  <v-col cols="8">
+                    <label v-if="!loading">{{ grossLeveredIRR }}</label>
+
+                    <v-progress-linear
+                      v-if="loading"
+                      color="deep-purple accent-4"
+                      indeterminate
+                      rounded
+                      height="6"
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="6">
+                <v-row>
+                  <v-col cols="4">
+                    <v-subheader>Gross Levered MoC</v-subheader>
+                  </v-col>
+                  <v-col cols="8">
+                    <label v-if="!loading">{{ grossLeveredMOC }}</label>
+
+                    <v-progress-linear
+                      v-if="loading"
+                      color="deep-purple accent-4"
+                      indeterminate
+                      rounded
+                      height="6"
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="4">
+                    <v-subheader>Yield On Cost</v-subheader>
+                  </v-col>
+                  <v-col cols="8">
+                    <label v-if="!loading">{{ yieldOnCost }}</label>
+
+                    <v-progress-linear
+                      v-if="loading"
+                      color="deep-purple accent-4"
+                      indeterminate
+                      rounded
+                      height="6"
+                    ></v-progress-linear>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
           </v-card>
         </v-col>
       </v-row>
@@ -426,11 +528,13 @@ import axios from "axios";
 
 export default {
   data: (vm) => ({
-    totalSF: 0,
-    holdPeriod: 0,
-    purchasePrice: 0,
-    exitCapRate: 0,
-    inPlaceRentPSF: 0,
+    loading: false,
+
+    totalSF: 1,
+    holdPeriod: 1,
+    purchasePrice: 1,
+    exitCapRate: 1,
+    inPlaceRentPSF: 1,
     inPlaceExpiration: new Date(
       Date.now() - new Date().getTimezoneOffset() * 60000
     )
@@ -441,8 +545,14 @@ export default {
         .toISOString()
         .substr(0, 10)
     ),
-    newTenantRentPSF: 0,
-    newTenantTISF: 0,
+    newTenantRentPSF: 1,
+    newTenantTISF: 1,
+
+    unleveredIRR: 0,
+    unleveredMOC: 0,
+    grossLeveredIRR: 0,
+    grossLeveredMOC: 0,
+    yieldOnCost: 0,
 
     allInputs: false,
     valid: true,
@@ -452,8 +562,8 @@ export default {
       .toISOString()
       .substr(0, 10),
     numberRules: [
-      (v) => !!v || "The field is required",
-      (v) => (v && v <= -1) || "Value should be more than 0",
+      //(v) => !!v || "The field is required",
+      (v) => (v && v >= 0) || "Value should be more than 0",
     ],
   }),
   computed: {
@@ -462,6 +572,9 @@ export default {
     },
   },
   watch: {
+    loading() {
+      return this.loading;
+    },
     date() {
       this.inPlaceExpirationFormated = this.formatDate(this.date);
     },
@@ -481,12 +594,20 @@ export default {
     },
     calculate() {
       console.log("Call G Sheets Endpoint");
-      this.$refs.form.validate();
+      if (!this.$refs.form.validate()) {
+        console.log("First form invalid");
+        return;
+      }
       console.log("First form valid");
       if (this.$data.allInputs) {
-        this.$refs.more.validate();
+        if (!this.$refs.more.validate()) {
+          console.log("Second form invalid");
+          return;
+        }
         console.log("Second form valid");
       }
+
+      this.$data.loading = true;
       const payload = {
         totalSF: this.$data.totalSF,
         holdPeriod: this.$data.holdPeriod,
@@ -505,9 +626,20 @@ export default {
       })
         .then((response) => {
           console.log("Response ", response);
+
+          this.$data.unleveredIRR = response.data.unleveredIRR;
+          this.$data.unleveredMOC = response.data.unleveredMOC;
+          this.$data.grossLeveredIRR = response.data.grossLeveredIRR;
+          this.$data.grossLeveredMOC = response.data.grossLeveredMOC;
+          this.$data.yieldOnCost = response.data.yieldOnCost;
+
+          this.$data.loading = false;
         })
         .catch((error) => {
           console.log("Error ", error);
+
+          const l = this.loader;
+          this[l] = false;
         });
     },
     canSubmit() {
@@ -519,3 +651,42 @@ export default {
   },
 };
 </script>
+
+<style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

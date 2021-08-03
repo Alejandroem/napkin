@@ -1,3 +1,4 @@
+import json
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -13,4 +14,5 @@ def index(request):
 
 class CalculatorAPI(APIView): 
     def post(self, request):
-        return JsonResponse(calculate_from_gsheets(request.data), safe=False)
+        body_data = json.loads(request.body)
+        return JsonResponse(calculate_from_gsheets(body_data), safe=False)

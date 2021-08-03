@@ -165,19 +165,19 @@
                         <v-dialog
                           ref="dialog"
                           v-model="modal"
-                          :return-value.sync="date"
+                          :return-value.sync="analysisStart"
                           persistent
                           width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="date"
+                              v-model="analysisStartFormated"
                               readonly
                               v-bind="attrs"
                               v-on="on"
                             ></v-text-field>
                           </template>
-                          <v-date-picker v-model="date" scrollable>
+                          <v-date-picker v-model="analysisStart" scrollable>
                             <v-spacer></v-spacer>
                             <v-btn text color="primary" @click="modal = false">
                               Cancel
@@ -185,7 +185,7 @@
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.dialog.save(date)"
+                              @click="$refs.dialog.save(analysisStart)"
                             >
                               OK
                             </v-btn>
@@ -201,7 +201,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="reimbursement"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -214,7 +214,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="brokerComission"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -227,7 +227,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="exitCosts"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -240,7 +240,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="upfrontCapexCostsPSF"
                           suffix="$"
                         ></v-text-field>
                       </v-col>
@@ -253,7 +253,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="transactionCosts"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -266,7 +266,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="leasingComissions"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -279,7 +279,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="expesnsesSfYr"
                           suffix="$"
                         ></v-text-field>
                       </v-col>
@@ -293,7 +293,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="ltc"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -306,7 +306,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="financingFee"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -319,7 +319,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="interestRate"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -332,7 +332,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="rentSteps"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -345,7 +345,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="downtimeMonths"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -357,7 +357,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="capexReserves"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -369,7 +369,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="otherClosingCosts"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -382,7 +382,7 @@
                       <v-col cols="8">
                         <v-text-field
                           type="number"
-                          value="10.00"
+                          v-model="acquisitionFees"
                           suffix="%"
                         ></v-text-field>
                       </v-col>
@@ -530,6 +530,7 @@ export default {
   data: (vm) => ({
     loading: false,
 
+    //FIRST FORM
     totalSF: 1,
     holdPeriod: 1,
     purchasePrice: 1,
@@ -548,6 +549,31 @@ export default {
     newTenantRentPSF: 1,
     newTenantTISF: 1,
 
+    //SECOND FORM
+    analysisStart: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .substr(0, 10),
+    analysisStartFormated: vm.formatDate(
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10)
+    ),
+    reimbursement: 100,
+    brokerComission: 1,
+    exitCosts: 2,
+    upfrontCapexCostsPSF: 5,
+    transactionCosts: 1,
+    leasingComissions: 7,
+    expesnsesSfYr: 3.0,
+    ltc: 60,
+    financingFee: 1,
+    interestRate: 4,
+    rentSteps: 4,
+    downtimeMonths: 9,
+    capexReserves: 0.15,
+    otherClosingCosts: 1,
+    acquisitionFees: 1,
+    //RESULTS
     unleveredIRR: 0,
     unleveredMOC: 0,
     grossLeveredIRR: 0,
@@ -568,6 +594,9 @@ export default {
   }),
   computed: {
     computedInPlaceExpirationFormated() {
+      return this.formatDate(this.inPlaceExpiration);
+    },
+    computedAnalysisStartFormated() {
       return this.formatDate(this.inPlaceExpiration);
     },
   },
@@ -617,7 +646,28 @@ export default {
         inPlaceExpiration: this.$data.inPlaceExpirationFormated,
         newTenantRentPSF: this.$data.newTenantRentPSF,
         newTenantTISF: this.$data.newTenantTISF,
+        allInputs: false,
       };
+
+      if (this.$data.allInputs) {
+        payload.allInputs = true;
+        payload["analysisStart"] = this.$data.analysisStartFormated;
+        payload["reimbursement"] = this.$data.reimbursement;
+        payload["brokerComission"] = this.$data.brokerComission;
+        payload["exitCosts"] = this.$data.exitCosts;
+        payload["upfrontCapexCostsPSF"] = this.$data.upfrontCapexCostsPSF;
+        payload["transactionCosts"] = this.$data.transactionCosts;
+        payload["leasingComissions"] = this.$data.leasingComissions;
+        payload["expesnsesSfYr"] = this.$data.expesnsesSfYr;
+        payload["ltc"] = this.$data.ltc;
+        payload["financingFee"] = this.$data.financingFee;
+        payload["interestRate"] = this.$data.interestRate;
+        payload["rentSteps"] = this.$data.rentSteps;
+        payload["downtimeMonths"] = this.$data.downtimeMonths;
+        payload["capexReserves"] = this.$data.capexReserves;
+        payload["otherClosingCosts"] = this.$data.otherClosingCosts;
+        payload["acquisitionFees"] = this.$data.acquisitionFees;
+      }
       axios({
         method: "post",
         url: "http://localhost:8000/calculator/api/calculator",

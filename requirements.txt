@@ -5,3 +5,4 @@ gspread
 markdown
 django-filter
 django-cors-headers
+google-api-python-client

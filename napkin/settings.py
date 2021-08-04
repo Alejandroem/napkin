@@ -14,6 +14,11 @@ import os
 
 from pathlib import Path
 
+import os
+from posixpath import abspath, dirname
+PROJECT_ROOT = dirname(dirname(abspath(__file__)))
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

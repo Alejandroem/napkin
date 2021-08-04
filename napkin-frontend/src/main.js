@@ -23,8 +23,8 @@ const store = new Vuex.Store({
     isAuth: false,
     jwt: localStorage.getItem('t'),
     endpoints: {
-      obtainJWT: 'http://0.0.0.0:8000/auth/obtain_token',
-      refreshJWT: 'http://0.0.0.0:8000/auth/refresh_token'
+      obtainJWT: 'http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/auth/obtain_token',
+      refreshJWT: 'http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/auth/refresh_token'
     }
   },
   mutations: {

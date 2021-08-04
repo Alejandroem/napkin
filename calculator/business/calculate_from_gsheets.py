@@ -9,8 +9,7 @@ from apiclient import errors
 
 def calculate_from_gsheets(values):    
 
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            '/home/admin/napkin/napkin/pythonsheets-321421-8d7f4d692a90.json')
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('pythonsheets-321421-8d7f4d692a90.json')
     service = build('drive', 'v3', credentials=credentials)
     
 

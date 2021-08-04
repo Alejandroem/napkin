@@ -4,3 +4,4 @@ oauth2client
 gspread
 markdown
 django-filter
+django-cors-headers

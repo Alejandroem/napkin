@@ -10,16 +10,16 @@ from apiclient import errors
 def calculate_from_gsheets(values):    
 
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            'elion-321816-aa93c053dc8e.json')
+            'pythonsheets-321421-8d7f4d692a90.json')
     service = build('drive', 'v3', credentials=credentials)
     
 
 
     #File id
-    source_file_id = '1zpMflkw4f36QPO9zHFgMcu2KPnokYMpNsquXRhkNZtg'
+    source_file_id = '1rEGCfoMPKEfrXVaIBiLU-T2B6oKYkQzlw4AsF0d_7Zw'
 
     #Folder id
-    folders_id = ['10NNiY_9T5Jv_CVeEkFFbBqbbztgTin3t']
+    folders_id = ['1FSZ5_Ckdn7-GZykLtIHvltMvK9aQ8-K6']
 
     file_metadata = {
         'name' : datetime.now().isoformat(),
@@ -33,8 +33,7 @@ def calculate_from_gsheets(values):
         print(created_file)
     except errors.HttpError as error:
         print(error)
-        print(error.error_details)
-        raise ValueError('An error occured while creating the file')
+        raise ValueError('An error occured while creating the file' + error.error_details)
 
 
     gc = gspread.service_account(filename='pythonsheets-321421-8d7f4d692a90.json')
@@ -79,9 +78,9 @@ def calculate_from_gsheets(values):
         'yieldOnCost': resultsSheet.acell('B5').value,
     }
 
-    # try:
-    #     created_file = service.files().delete(fileId=created_file['id']).execute()
-    # except errors.HttpError as error:
-    #     print(error)
-    #     raise ValueError('An error occured while deleting the file' + error.error_details)
+    try:
+        created_file = service.files().delete(fileId=created_file['id']).execute()
+    except errors.HttpError as error:
+        print(error)
+        raise ValueError('An error occured while deleting the file' + error.error_details)
     return response

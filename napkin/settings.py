@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import environ
+
 import datetime
 import os
 
@@ -16,6 +18,12 @@ from pathlib import Path
 
 import os
 from posixpath import abspath, dirname
+
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -158,4 +166,4 @@ STATICFILES_DIRS = ['static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GOOGLE_CLIENT_SECRET_FILE = os.path.join(BASE_DIR, 'pythonsheets-321421-8d7f4d692a90.json')
+GOOGLE_CLIENT_SECRET_FILE = env('GOOGLE_CLIENT_SECRET_FILE')

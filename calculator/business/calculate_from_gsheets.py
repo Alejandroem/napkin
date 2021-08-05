@@ -10,7 +10,7 @@ from apiclient import errors
 
 def calculate_from_gsheets(values):    
     print(GOOGLE_CLIENT_SECRET_FILE)
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_CLIENT_SECRET_FILE)
+    credentials = ServiceAccountCredentials.from_json(GOOGLE_CLIENT_SECRET_FILE)
     service = build('drive', 'v3', credentials=credentials)
     
 

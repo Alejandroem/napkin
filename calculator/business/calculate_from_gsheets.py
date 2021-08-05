@@ -78,9 +78,9 @@ def calculate_from_gsheets(values):
         'yieldOnCost': resultsSheet.acell('B5').value,
     }
 
-    # try:
-    #     created_file = service.files().delete(fileId=created_file['id']).execute()
-    # except errors.HttpError as error:
-    #     print(error)
-    #     raise ValueError('An error occured while deleting the file' + error.error_details)
+    try:
+        created_file = service.files().delete(fileId=created_file['id']).execute()
+    except errors.HttpError as error:
+        print(error)
+        raise ValueError('An error occured while deleting the file' + error.error_details)
     return response

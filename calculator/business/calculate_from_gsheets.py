@@ -12,7 +12,6 @@ def calculate_from_gsheets(values):
     credentials_path = BASE_DIR / 'pythonsheets-321421-8d7f4d692a90.json'
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path)
     service = build('drive', 'v3', credentials=credentials)
-    
 
 
     #File id

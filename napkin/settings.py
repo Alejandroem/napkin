@@ -19,17 +19,18 @@ env = environ.Env(
 environ.Env.read_env()
 
 GOOGLE_CLIENT_SECRET_FILE = {
-    "type": env('type'),
-    "project_id": env('project_id'),
-    "private_key_id": env('private_key_id'),
-    "private_key": env('private_key'),
-    "client_email": env('client_email'),
-    "client_id": env('client_id'),
-    "auth_uri": env('auth_uri'),
-    "token_uri": env('token_uri'),
-    "auth_provider_x509_cert_url": env('auth_provider_x509_cert_url'),
-    "client_x509_cert_url": env('client_x509_cert_url'),
+  "type": "service_account",
+  "project_id": "pythonsheets-321421",
+  "private_key_id": "8d7f4d692a90bf59e5efa41550266e83acba44e9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDDY9Eemv3OIf4j\nZUIOJ3qOnULauD7m/wUKjGb0HHtlgGEVuwwih8HpDgk38JbhkPwoZYAGICp8uNcD\n+/2WdQZU3OAtgm1XQzEEv9RGJoBH/0oTFuiYbQLJYH5QIHnwuaoymyETUQ/9b5X+\nHaYFUXUUgZpAY5Fg0aF0xFZnBzyZouKN7uxCq4EJ0AXdxtLhdXyb97hpUqxRvmG2\nyp977ksmgXbxFIvKFaRyYzbgiTddOhxBzbTGmsfmwBCQOz/4BJj0BrAw8Vh5tul4\n4QagMifT7zwRSWOzTRJL8vxdL7adQdaHfat4MlOC0rrSTmMCdSumb4yVlMBMc4Qr\n6F8VxG9XAgMBAAECggEAKjmhEL8oCGsaM+YHH23ys21S7FeS6HLGUSBEg47AMBBN\natfQaIn0Ivxwi5FH2hluFQDSaQB8jhWYCflkNSa3JpHRNKSSIqCXsFIQetSJNoX6\nKSPzQjWUu5ZJ1eEe2SIWoPcbb8Q982QxAwi/Pzj6V2MmxbF+0nCbNtPTZFKRCxZi\nT4zwgjNuCCCtBb3SnBgNX3qiNBzTC7TdAB7fxHlDgvivWFp2VxlZNuUEdjeDgK+6\nEUl6MQqt4/j3hr59sQKKetGOZz2faySffLNTNCfwPJXaTpll9FQO6QyxmBinRqOu\n3g4hlXaRfMJJi9xySdP+LD8h1X5DJwxF+NshrKRF2QKBgQD1ekFRsc/59SZDdhBw\njGY+XOQjKLy6GGgQKLAq+c1kE9KcAIYqy74P5yQQfxAXBsM8ci+VjUBthFkDmAR0\ntgDd4WvlnB2+pKAMhRflnhyrih46zKjZC8RrW2euM8h6I4BokT22IalRFy54A/RF\nX6IPicLrAHKbjjluduqSiWJMdQKBgQDLw+zwPXWY1rA1pT5SZDHUrV8ks8LFHdiq\nJGtl7vDpvm4/nkNRXcj/M6G1ObCfWVos2PiGmuzx1+T0NjGd1/+6LjR2ltm8DZeC\n7n41bKvUFqlsDG+6d+xeeVOtFCkM80//gjmHs2c1qG7Oj7QJmoqE/5qSkZtheGma\ns9Usn10DGwKBgQCmfk8DO9jVrgJPyyoHTBKkxZguiJjIl3ktTIt/+oHmGNPF300g\nhaPZYWpCjgu5smqE+uVvR6ilHxjIqTiMeE1KMHRf/WznOv0awMKeiIjlh/5M3za+\nT47fSdWef5y/yohzY985Qsd2KoTn/baVvvFKHKPJhDo3a1VkqN8cmHXFaQKBgHek\nAmrMq0+iPrRA4ebejaOiaErUgXfbnmvIFoczVKDp/zG7aytLNckiN8CArwPhIuFS\nRBpEvPsDGJuLdnaHbM+UcZlv2UhhcqSeA9y6gel1pOScKL4Dy/Vsp4ToYXIJKt+L\nRtw2qlMHIoiGN9+rrcmJiuikNed1HAyJqpEYwTQhAoGABAvlfzFwZdTlCXakrgkW\nrv9m+f5ZQBnjSk+LkQbV/xnapixd1z1D6cocR9RS4BIymbKMjc9MfvsaehVsqMlk\nxKIJqGgZpLwprzYajfNPmnd0andoi+43vhUA1qpCCmTibpMVGyyHR9osmtDFmCo9\n/sIvzLorH8okKyzLNm6RP3I=\n-----END PRIVATE KEY-----\n",
+  "client_email": "python-sheets@pythonsheets-321421.iam.gserviceaccount.com",
+  "client_id": "112313588562111372825",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/python-sheets%40pythonsheets-321421.iam.gserviceaccount.com"
 }
+
 
 import datetime
 import os

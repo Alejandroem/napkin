@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from apiclient import errors
 
 def calculate_from_gsheets(values):    
-    credentials_path = BASE_DIR / 'static/pythonsheets-321421-8d7f4d692a90.json'
+    credentials_path = BASE_DIR / 'pythonsheets-321421-8d7f4d692a90.json'
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path)
     service = build('drive', 'v3', credentials=credentials)
 
@@ -35,7 +35,7 @@ def calculate_from_gsheets(values):
         raise ValueError('An error occured while creating the file' + error.error_details)
 
 
-    gc = gspread.service_account(filename='pythonsheets-321421-8d7f4d692a90.json')
+    gc = gspread.service_account(filename=credentials_path)
     gdoc = gc.open_by_url("https://docs.google.com/spreadsheets/d/"+created_file['id'])
 
     mydata = gdoc.sheet1.get_all_records()

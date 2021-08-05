@@ -1,5 +1,5 @@
 from datetime import datetime
-from napkin.settings import BASE_DIR
+from napkin.settings import GOOGLE_CLIENT_SECRET_FILE
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -9,9 +9,8 @@ from googleapiclient.discovery import build
 from apiclient import errors
 
 def calculate_from_gsheets(values):    
-    credentials_path = os.path.join(BASE_DIR, 'pythonsheets-321421-8d7f4d692a90.json')
-    print(credentials_path)
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path)
+    print(GOOGLE_CLIENT_SECRET_FILE)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_CLIENT_SECRET_FILE)
     service = build('drive', 'v3', credentials=credentials)
     
 

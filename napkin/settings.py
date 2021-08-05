@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_google.apps.DjangoGoogleConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -157,3 +158,5 @@ STATICFILES_DIRS = ['static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+GOOGLE_CLIENT_SECRET_FILE = os.path.join(BASE_DIR, 'pythonsheets-321421-8d7f4d692a90.json')

@@ -16,7 +16,7 @@ from pathlib import Path
 
 import os
 from posixpath import abspath, dirname
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

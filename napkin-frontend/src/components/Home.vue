@@ -1,11 +1,97 @@
 <template>
   <div>
     <v-container fill-height fluid>
+      <v-row>
+        <v-btn
+          relative
+          bottom
+          right
+          fab
+          tile
+          text
+          fixed
+          elevation="5"
+          :loading="loading"
+          :disabled="loading || !canSubmit()"
+          color="success"
+          @click="calculate"
+        >
+          <v-icon light>mdi-calculator</v-icon>
+          <template v-if="loading">
+            <span class="custom-loader">
+              <v-icon light>mdi-cached</v-icon>
+            </span>
+          </template>
+        </v-btn>
+      </v-row>
+      <v-dialog v-model="loadingDialog" hide-overlay persistent width="300">
+        <v-card color="primary" dark>
+          <v-card-text>
+            Please stand by
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="resultsDialog" hide-overlay persistent width="600">
+        <v-card>
+          <v-toolbar color="primary" dark>Results</v-toolbar>
+          <v-card-text>
+            <v-row v-if="!hasError" class="pa-5">
+              <v-col cols="6">
+                <v-row>
+                  <v-col cols="6"> Unlevered IRR </v-col>
+                  <v-col cols="6">
+                    {{ unleveredIRR }}
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="6"> Unlevered MoC </v-col>
+                  <v-col cols="6">
+                    {{ unleveredMOC }}
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="6"> Gross Levered IRR </v-col>
+                  <v-col cols="6">
+                    {{ grossLeveredIRR }}
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="6">
+                <v-row>
+                  <v-col cols="6"> Gross Levered MoC </v-col>
+                  <v-col cols="6">
+                    {{ grossLeveredMOC }}
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="6"> Yield On Cost </v-col>
+                  <v-col cols="6">
+                    {{ yieldOnCost }}
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn text @click="resultsDialog = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-row no-gutters justify="center" class="ma-4">
         <v-col cols="8">
           <v-card class="pa-6">
             <h3>Input</h3>
             <v-form
+              :disabled="loading"
               ref="form"
               v-model="valid"
               lazy-validation
@@ -158,6 +244,7 @@
             <template v-if="allInputs">
               <v-divider class="ma-4"></v-divider>
               <v-form
+                :disabled="loading"
                 ref="more"
                 v-model="validAll"
                 lazy-validation
@@ -404,135 +491,25 @@
                 </v-row>
               </v-form>
             </template>
-            <v-row align="end" justify="end">
+            <v-row align="end" justify="center">
               <v-btn
                 class="mx-2"
-                fab
                 dark
                 color="indigo"
                 @click="allInputs = !allInputs"
               >
-                <v-icon dark v-if="!allInputs"> mdi-plus </v-icon>
-                <v-icon dark v-if="allInputs"> mdi-minus </v-icon>
+                <span v-if="!allInputs"
+                  ><v-icon dark> mdi-plus </v-icon> More Inputs</span
+                >
+                <span v-if="allInputs"
+                  ><v-icon dark> mdi-minus </v-icon> Less Inputs</span
+                >
               </v-btn>
             </v-row>
             <v-row align="center" justify="center" v-if="hasError">
               <v-alert color="red" type="error">
                 There was an error with your request, refresh and try again
               </v-alert>
-            </v-row>
-            <v-row align="center" justify="center">
-              <v-btn
-                class="ma-2"
-                :loading="loading"
-                :disabled="loading || !canSubmit()"
-                color="success"
-                @click="calculate"
-              >
-                Save & Run
-                <template v-if="loading">
-                  <span class="custom-loader">
-                    <v-icon light>mdi-cached</v-icon>
-                  </span>
-                </template>
-              </v-btn>
-            </v-row>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters justify="center" class="ma-4">
-        <v-col cols="8">
-          <v-card class="pa-6">
-            <h3>Results</h3>
-            <v-row v-if="!hasError">
-              <v-col cols="6">
-                <v-row>
-                  <v-col cols="4">
-                    <v-subheader>Unlevered IRR</v-subheader>
-                  </v-col>
-                  <v-col cols="8">
-                    <label v-if="!loading">{{ unleveredIRR }}</label>
-
-                    <v-progress-linear
-                      v-if="loading"
-                      color="deep-purple accent-4"
-                      indeterminate
-                      rounded
-                      height="6"
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col cols="4">
-                    <v-subheader>Unlevered MoC</v-subheader>
-                  </v-col>
-                  <v-col cols="8">
-                    <label v-if="!loading">{{ unleveredMOC }}</label>
-
-                    <v-progress-linear
-                      v-if="loading"
-                      color="deep-purple accent-4"
-                      indeterminate
-                      rounded
-                      height="6"
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col cols="4">
-                    <v-subheader>Gross Levered IRR</v-subheader>
-                  </v-col>
-                  <v-col cols="8">
-                    <label v-if="!loading">{{ grossLeveredIRR }}</label>
-
-                    <v-progress-linear
-                      v-if="loading"
-                      color="deep-purple accent-4"
-                      indeterminate
-                      rounded
-                      height="6"
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="6">
-                <v-row>
-                  <v-col cols="4">
-                    <v-subheader>Gross Levered MoC</v-subheader>
-                  </v-col>
-                  <v-col cols="8">
-                    <label v-if="!loading">{{ grossLeveredMOC }}</label>
-
-                    <v-progress-linear
-                      v-if="loading"
-                      color="deep-purple accent-4"
-                      indeterminate
-                      rounded
-                      height="6"
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col cols="4">
-                    <v-subheader>Yield On Cost</v-subheader>
-                  </v-col>
-                  <v-col cols="8">
-                    <label v-if="!loading">{{ yieldOnCost }}</label>
-
-                    <v-progress-linear
-                      v-if="loading"
-                      color="deep-purple accent-4"
-                      indeterminate
-                      rounded
-                      height="6"
-                    ></v-progress-linear>
-                  </v-col>
-                </v-row>
-              </v-col>
             </v-row>
           </v-card>
         </v-col>
@@ -547,6 +524,8 @@ import axios from "axios";
 export default {
   data: (vm) => ({
     loading: false,
+    loadingDialog: false,
+    resultsDialog: false,
     hasError: false,
     //FIRST FORM
     totalSF: 1,
@@ -654,7 +633,7 @@ export default {
         }
         console.log("Second form valid");
       }
-
+      this.$data.loadingDialog = true;
       this.$data.loading = true;
       this.$data.hasError = false;
       const payload = {
@@ -671,7 +650,7 @@ export default {
 
       if (this.$data.allInputs) {
         payload.allInputs = true;
-        payload["analysisStart"] = this.$data.computedAnalysisStartFormated;
+        payload["analysisStart"] = this.computedAnalysisStartFormated;
         payload["reimbursement"] = this.$data.reimbursement;
         payload["brokerComission"] = this.$data.brokerComission;
         payload["exitCosts"] = this.$data.exitCosts;
@@ -704,11 +683,14 @@ export default {
           this.$data.yieldOnCost = response.data.yieldOnCost;
 
           this.$data.loading = false;
+          this.$data.loadingDialog = false;
+          this.$data.resultsDialog = true;
         })
         .catch((error) => {
           console.log("Error ", error);
           this.$data.loading = false;
           this.$data.hasError = true;
+          this.$data.loadingDialog = false;
         });
     },
     canSubmit() {

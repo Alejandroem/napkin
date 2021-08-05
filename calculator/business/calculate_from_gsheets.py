@@ -41,6 +41,8 @@ def calculate_from_gsheets(values):
 
     mydata = gdoc.sheet1.get_all_records()
 
+    print(values)
+
     inputsSheet = gdoc.worksheet("Inputs")
     inputsSheet.update('B2', float(values['totalSF']), value_input_option='USER_ENTERED')
     inputsSheet.update('B3', float(values['holdPeriod']), value_input_option='USER_ENTERED')

@@ -669,7 +669,7 @@ export default {
       }
       axios({
         method: "post",
-        url: "http://localhost:8000/calculator/api/calculator",
+        url: "http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/calculator/api/calculator",
         data: payload,
         headers: { Authorization: "jwt " + this.$store.state.jwt },
       })

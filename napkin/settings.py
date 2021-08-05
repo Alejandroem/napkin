@@ -10,6 +10,26 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+# reading .env file
+environ.Env.read_env()
+
+GOOGLE_CLIENT_SECRET_FILE = {
+    "type": env('type'),
+    "project_id": env('project_id'),
+    "private_key_id": env('private_key_id'),
+    "private_key": env('private_key'),
+    "client_email": env('client_email'),
+    "client_id": env('client_id'),
+    "auth_uri": env('auth_uri'),
+    "token_uri": env('token_uri'),
+    "auth_provider_x509_cert_url": env('auth_provider_x509_cert_url'),
+    "client_x509_cert_url": env('client_x509_cert_url'),
+}
 
 import datetime
 import os
@@ -20,9 +40,6 @@ import os
 from posixpath import abspath, dirname
 
 
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -165,5 +182,3 @@ STATICFILES_DIRS = ['static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-GOOGLE_CLIENT_SECRET_FILE = env('GOOGLE_CLIENT_SECRET_FILE')

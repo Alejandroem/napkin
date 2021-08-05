@@ -61,6 +61,7 @@
                       <v-text-field
                         type="number"
                         v-model="exitCapRate"
+                        suffix="%"
                         :rules="numberRules"
                       ></v-text-field>
                     </v-col>
@@ -87,8 +88,8 @@
                     </v-col>
                     <v-col cols="8">
                       <v-dialog
-                        ref="dialog"
-                        v-model="modal"
+                        ref="dialogInPlaceExpiration"
+                        v-model="modalInPlaceExpiration"
                         :return-value.sync="inPlaceExpiration"
                         persistent
                         width="290px"
@@ -103,13 +104,21 @@
                         </template>
                         <v-date-picker v-model="inPlaceExpiration" scrollable>
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="modal = false">
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="modalInPlaceExpiration = false"
+                          >
                             Cancel
                           </v-btn>
                           <v-btn
                             text
                             color="primary"
-                            @click="$refs.dialog.save(inPlaceExpiration)"
+                            @click="
+                              $refs.dialogInPlaceExpiration.save(
+                                inPlaceExpiration
+                              )
+                            "
                           >
                             OK
                           </v-btn>
@@ -163,15 +172,15 @@
                       </v-col>
                       <v-col cols="8">
                         <v-dialog
-                          ref="dialog"
-                          v-model="modal"
+                          ref="dialogAnalysis"
+                          v-model="modalAnalysis"
                           :return-value.sync="analysisStart"
                           persistent
                           width="290px"
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                              v-model="analysisStartFormated"
+                              v-model="computedAnalysisStartFormated"
                               readonly
                               v-bind="attrs"
                               v-on="on"
@@ -179,13 +188,17 @@
                           </template>
                           <v-date-picker v-model="analysisStart" scrollable>
                             <v-spacer></v-spacer>
-                            <v-btn text color="primary" @click="modal = false">
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="modalAnalysis = false"
+                            >
                               Cancel
                             </v-btn>
                             <v-btn
                               text
                               color="primary"
-                              @click="$refs.dialog.save(analysisStart)"
+                              @click="$refs.dialogAnalysis.save(analysisStart)"
                             >
                               OK
                             </v-btn>
@@ -588,7 +601,8 @@ export default {
     allInputs: false,
     valid: true,
     validAll: true,
-    modal: false,
+    modalAnalysis: null,
+    modalInPlaceExpiration: null,
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -602,7 +616,7 @@ export default {
       return this.formatDate(this.inPlaceExpiration);
     },
     computedAnalysisStartFormated() {
-      return this.formatDate(this.inPlaceExpiration);
+      return this.formatDate(this.analysisStart);
     },
   },
   watch: {
@@ -649,7 +663,7 @@ export default {
         purchasePrice: this.$data.purchasePrice,
         exitCapRate: this.$data.exitCapRate,
         inPlaceRentPSF: this.$data.inPlaceRentPSF,
-        inPlaceExpiration: this.$data.inPlaceExpirationFormated,
+        inPlaceExpiration: this.computedInPlaceExpirationFormated,
         newTenantRentPSF: this.$data.newTenantRentPSF,
         newTenantTISF: this.$data.newTenantTISF,
         allInputs: false,
@@ -657,7 +671,7 @@ export default {
 
       if (this.$data.allInputs) {
         payload.allInputs = true;
-        payload["analysisStart"] = this.$data.analysisStartFormated;
+        payload["analysisStart"] = this.$data.computedAnalysisStartFormated;
         payload["reimbursement"] = this.$data.reimbursement;
         payload["brokerComission"] = this.$data.brokerComission;
         payload["exitCosts"] = this.$data.exitCosts;
@@ -676,7 +690,7 @@ export default {
       }
       axios({
         method: "post",
-        url: "http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/calculator/api/calculator",
+        url: "http://localhost:8000/calculator/api/calculator",
         data: payload,
         headers: { Authorization: "jwt " + this.$store.state.jwt },
       })

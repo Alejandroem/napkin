@@ -1,5 +1,5 @@
 from datetime import datetime
-from napkin.settings import BASE_DIR
+from napkin.settings import BASE_DIR, CREDENTIALS_FILE, FOLDER_ID, SOURCE_FILE_ID
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -9,16 +9,16 @@ from googleapiclient.discovery import build
 from apiclient import errors
 
 def calculate_from_gsheets(values):    
-    credentials_path = BASE_DIR / 'pythonsheets-321421-8d7f4d692a90.json'
+    credentials_path = BASE_DIR / CREDENTIALS_FILE
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path)
     service = build('drive', 'v3', credentials=credentials)
 
 
     #File id
-    source_file_id = '1rEGCfoMPKEfrXVaIBiLU-T2B6oKYkQzlw4AsF0d_7Zw'
+    source_file_id = SOURCE_FILE_ID
 
     #Folder id
-    folders_id = ['1FSZ5_Ckdn7-GZykLtIHvltMvK9aQ8-K6']
+    folders_id = [FOLDER_ID]
 
     file_metadata = {
         'name' : datetime.now().isoformat(),

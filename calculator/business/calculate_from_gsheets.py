@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from apiclient import errors
 
 def calculate_from_gsheets(values):    
-    credentials_path = BASE_DIR / 'pythonsheets-321421-8d7f4d692a90.json'
+    credentials_path = os.path.join(BASE_DIR, 'pythonsheets-321421-8d7f4d692a90.json')
     print(credentials_path)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path)
     service = build('drive', 'v3', credentials=credentials)

@@ -80,27 +80,31 @@ const store = new Vuex.Store({
       const token = this.state.jwt;
       if (token) {
         const decoded = jwt_decode(token);
+        const exp = decoded.exp;
+        const orig_iat = decoded.orig_iat;
+
         console.log("Decoded token ", decoded);
-        const exp = decoded.exp
         //const orig_iat = decoded.orig_iat
 
-        if (Date.now() >= exp * 1000) {
-          this.commit('updateIsAuth', false);
-        } else {
-          console.log("Do nothing");
-          this.commit('updateIsAuth', true);
-        }
-        // if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - orig_iat < 628200) {
-        //   this.dispatch('refreshToken')
-        // } else if (exp - (Date.now() / 1000) < 1800) {
-        //   // DO NOTHING, DO NOT REFRESH          
+        // if (Date.now() >= exp * 1000) {
+        //   this.commit('updateIsAuth', false);
+        // } else {
         //   console.log("Do nothing");
         //   this.commit('updateIsAuth', true);
-        // } else {
-        //   // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
-        //   console.log(" Prompt relogin ");
-        //   this.commit('updateIsAuth', false);
         // }
+        //1800 is 30 mins
+        // 628200 is 7 days
+        if (exp - (Date.now() / 1000) > 1800 && (Date.now() / 1000) - orig_iat < 628200) {
+          this.dispatch('refreshToken')
+          this.commit('updateIsAuth', true);
+          console.log("TOKEN IS VALID REFRESH");
+        } else if (exp - (Date.now() / 1000) < 1800) {
+          // DO NOTHING, DO NOT REFRESH          
+          console.log("DO NOTHING DO NOT REFRESH");
+        } else {
+          // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+          console.log("PROMPT RELOGIN");
+        }
       }
     },
     logout() {
@@ -117,6 +121,8 @@ new Vue({
     iconfont: 'mdi', // default - only for display purposes
   },
   store: store,
-  vuetify: new Vuetify(),
+  vuetify: new Vuetify({
+
+  }),
   render: h => h(App)
 }).$mount('#app')

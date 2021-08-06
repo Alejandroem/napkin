@@ -23,8 +23,8 @@ const store = new Vuex.Store({
     isAuth: false,
     jwt: localStorage.getItem('t'),
     endpoints: {
-      obtainJWT: 'http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/auth/obtain_token',
-      refreshJWT: 'http://ec2-54-241-133-28.us-west-1.compute.amazonaws.com/auth/refresh_token'
+      obtainJWT: '/auth/obtain_token',
+      refreshJWT: '/auth/refresh_token'
     }
   },
   mutations: {
@@ -102,6 +102,10 @@ const store = new Vuex.Store({
         //   this.commit('updateIsAuth', false);
         // }
       }
+    },
+    logout() {
+      this.commit('removeToken');
+      this.commit('updateIsAuth', false);
     }
   }
 })

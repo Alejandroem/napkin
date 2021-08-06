@@ -2,6 +2,9 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div v-if="isAuth">Welcome back {{ userName }}!</div>
+      <v-spacer></v-spacer>
+
+      <v-btn v-if="isAuth" justify-end outlined @click="logout"> Logout </v-btn>
     </v-app-bar>
     <v-main>
       <div v-if="!isAuth">
@@ -43,5 +46,11 @@ export default {
   data: () => ({
     //
   }),
+
+  methods: {
+    logout() {
+      return this.$store.dispatch("logout");
+    },
+  },
 };
 </script>

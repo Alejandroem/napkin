@@ -29,5 +29,6 @@ class FileAPI(APIView):
         word = request.data.get('word')
         excel = request.data.get('excel')
         return JsonResponse({
-            'got it': 'got it'
+            "exel": excel.temporary_file_path(),
+            "word": word.temporary_file_path(),
         }, safe=False)

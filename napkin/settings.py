@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+from posixpath import abspath, dirname
+from pathlib import Path
+import os
+import datetime
 import environ
 env = environ.Env(
     # set casting, default value
@@ -21,16 +25,6 @@ environ.Env.read_env()
 CREDENTIALS_FILE = env('CREDENTIALS_FILE')
 SOURCE_FILE_ID = env('SOURCE_FILE_ID')
 FOLDER_ID = env('FOLDER_ID')
-
-
-import datetime
-import os
-
-from pathlib import Path
-
-import os
-from posixpath import abspath, dirname
-
 
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -49,8 +43,9 @@ SECRET_KEY = 'django-insecure-+#q%-$2ph_+1886+2i(u8_lh=bh-6g)48rvo@c#uo8l+*6e@41
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 'localhost', '127.0.0.1', '0.0.0.0', 'ec2-54-241-133-28.us-west-1.compute.amazonaws.com']
-CORS_ALLOWED_ORIGINS = [ 'http://127.0.0.1:8000']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0',
+                 'ec2-54-241-133-28.us-west-1.compute.amazonaws.com']
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:8000']
 
 
 # Application definition
@@ -69,7 +64,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
-        #"rest_framework.permissions.IsAdminUser"
+        # "rest_framework.permissions.IsAdminUser"
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
@@ -169,6 +164,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'var/static_root/'
 STATICFILES_DIRS = ['static']
+
+
+MEDIA_ROOT = '/var/media_root/'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

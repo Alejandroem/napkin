@@ -2,6 +2,10 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div v-if="isAuth">Welcome back {{ userName }}!</div>
+      <v-tabs v-model="tab">
+        <v-tab key="calculator">Calculator</v-tab>
+        <v-tab key="file">File</v-tab>
+      </v-tabs>
       <v-spacer></v-spacer>
 
       <v-btn v-if="isAuth" justify-end outlined @click="logout"> Logout </v-btn>
@@ -11,7 +15,8 @@
         <LoginForm />
       </div>
       <div v-else>
-        <Home />
+        <Home v-if="tab == 0" />
+        <File v-if="tab == 1" />
       </div>
     </v-main>
   </v-app>
@@ -20,6 +25,7 @@
 <script>
 import LoginForm from "./components/LoginForm";
 import Home from "./components/Home";
+import File from "./components/File";
 
 export default {
   created: function () {
@@ -32,8 +38,8 @@ export default {
   components: {
     LoginForm,
     Home,
+    File,
   },
-
   computed: {
     isAuth() {
       return this.$store.state.isAuth;
@@ -44,7 +50,7 @@ export default {
   },
 
   data: () => ({
-    //
+    tab: null,
   }),
 
   methods: {

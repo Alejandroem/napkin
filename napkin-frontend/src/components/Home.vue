@@ -106,6 +106,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="totalSF"
                         :rules="numberRules"
@@ -119,6 +120,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="holdPeriod"
                         :rules="numberRules"
@@ -132,6 +134,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="purchasePrice"
                         :rules="numberRules"
@@ -145,6 +148,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="exitCapRate"
                         suffix="%"
@@ -161,6 +165,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="inPlaceRentPSF"
                         :rules="numberRules"
@@ -182,6 +187,7 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
+                            outlined
                             v-model="computedInPlaceExpirationFormated"
                             readonly
                             v-bind="attrs"
@@ -219,6 +225,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="newTenantRentPSF"
                         :rules="numberRules"
@@ -232,6 +239,7 @@
                     </v-col>
                     <v-col cols="8">
                       <v-text-field
+                        outlined
                         type="number"
                         v-model="newTenantTISF"
                         :rules="numberRules"
@@ -267,6 +275,7 @@
                         >
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
+                              outlined
                               v-model="computedAnalysisStartFormated"
                               readonly
                               v-bind="attrs"
@@ -300,6 +309,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="reimbursement"
                           suffix="%"
@@ -313,6 +323,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="brokerComission"
                           suffix="%"
@@ -326,6 +337,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="exitCosts"
                           suffix="%"
@@ -339,6 +351,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="upfrontCapexCostsPSF"
                           suffix="$"
@@ -352,6 +365,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="transactionCosts"
                           suffix="%"
@@ -365,6 +379,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="leasingComissions"
                           suffix="%"
@@ -378,6 +393,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="expesnsesSfYr"
                           suffix="$"
@@ -392,6 +408,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="ltc"
                           suffix="%"
@@ -405,6 +422,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="financingFee"
                           suffix="%"
@@ -418,6 +436,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="interestRate"
                           suffix="%"
@@ -431,6 +450,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="rentSteps"
                           suffix="%"
@@ -444,6 +464,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="downtimeMonths"
                         ></v-text-field>
@@ -456,6 +477,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="capexReserves"
                         ></v-text-field>
@@ -468,6 +490,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="otherClosingCosts"
                           suffix="%"
@@ -481,6 +504,7 @@
                       </v-col>
                       <v-col cols="8">
                         <v-text-field
+                          outlined
                           type="number"
                           v-model="acquisitionFees"
                           suffix="%"
